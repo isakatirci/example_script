@@ -34,3 +34,37 @@ echo "Tüm Java dosyalarında 'log.' ile başlayan ve ';' karakterine kadar her 
    ```
 
 Herhangi bir sorunuz veya daha fazla yardıma ihtiyacınız olursa lütfen belirtin!
+
+
+
+
+
+#!/bin/bash  
+
+# Değişiklik yapılacak dizin  
+DIRECTORY="."  
+
+# Tüm Java dosyalarını rekürsif olarak döngüye al  
+find "$DIRECTORY" -name "*.java" | while read -r file; do  
+    # Geçici dosya oluştur  
+    temp_file=$(mktemp)  
+
+    # Dosyadaki her satırı kontrol et  
+    while IFS= read -r line; do  
+        # "log." ile başlayan ve ';' karakterine kadar olan satırı kontrol et  
+        if [[ $line == log.* ]]; then  
+            # Silinen satırı ekrana yaz  
+            echo "Dosya: $file - Silinen Satır: $line"  
+        else  
+            # Satırdaki '\r' ve '\n' karakterlerini temizle  
+            cleaned_line=$(echo "$line" | tr -d '\r' | tr -d '\n')  
+            # Diğer satırları geçici dosyaya yaz  
+            echo "$cleaned_line" >> "$temp_file"  
+        fi  
+    done < "$file"  
+
+    # Geçici dosyayı orijinal dosya ile değiştir  
+    mv "$temp_file" "$file"  
+done  
+
+echo "Tüm Java dosyalarında 'log.' ile başlayan ve ';' karakteri dahil olan satırlar silindi."
