@@ -1,0 +1,36 @@
+Aşağıda, belirtilen dizinde ve alt dizinlerinde rekürsif olarak dolaşan ve "log." ile başlayan satırları, `;` karakterine kadar silen bir shell script örneği bulunmaktadır:
+
+```bash
+#!/bin/bash
+
+# Değişiklik yapılacak dizin
+DIRECTORY="."
+
+# Tüm Java dosyalarını rekürsif olarak döngüye al
+find "$DIRECTORY" -name "*.java" | while read -r file; do
+    # "log." ile başlayan ve ';' karakterine kadar her şeyi sil
+    sed -i.bak '/log\./s/log\..*;/;/g' "$file"
+done
+
+echo "Tüm Java dosyalarında 'log.' ile başlayan ve ';' karakterine kadar her şey silindi."
+```
+
+### Açıklama:
+- `find "$DIRECTORY" -name "*.java"` komutu, belirtilen dizin ve alt dizinlerdeki tüm `.java` dosyalarını bulur.
+- `while read -r file; do` döngüsü, bulunan her dosya için işlem yapar.
+- `sed -i.bak '/log\./s/log\..*;/;/g' "$file"` komutu, "log." ile başlayan ve `;` karakterine kadar olan her şeyi siler. `-i.bak` seçeneği, orijinal dosyanın bir yedeğini `.bak` uzantısıyla oluşturur.
+- Script çalıştırıldığında, belirtilen dizindeki ve alt dizinlerdeki tüm Java dosyalarında gerekli değişiklikler yapılır.
+
+### Kullanım:
+1. Yukarıdaki kodu bir dosyaya (örneğin `remove_log_recursive.sh`) kaydedin.
+2. Terminalde dosyanın bulunduğu dizine gidin.
+3. Script'i çalıştırmadan önce çalıştırma izni verin:
+   ```bash
+   chmod +x remove_log_recursive.sh
+   ```
+4. Script'i çalıştırın:
+   ```bash
+   ./remove_log_recursive.sh
+   ```
+
+Herhangi bir sorunuz veya daha fazla yardıma ihtiyacınız olursa lütfen belirtin!
