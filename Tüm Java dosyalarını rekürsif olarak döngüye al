@@ -68,3 +68,70 @@ find "$DIRECTORY" -name "*.java" | while read -r file; do
 done  
 
 echo "Tüm Java dosyalarında 'log.' ile başlayan ve ';' karakteri dahil olan satırlar silindi."
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Aşağıda, belirtilen dizinde ve alt dizinlerinde rekürsif olarak dolaşan, sadece `.java` dosyalarındaki "log." ile başlayan ve ilk `;` karakteri görülene kadar olan kısmı (dahil olarak) silen, tüm dosyayı metin olarak okuyan ve işleyen bir shell script örneği bulunmaktadır:
+
+```bash
+#!/bin/bash
+
+# Değişiklik yapılacak dizin
+DIRECTORY="."
+
+# Tüm Java dosyalarını rekürsif olarak döngüye al
+find "$DIRECTORY" -name "*.java" | while read -r file; do
+    # Dosyanın tamamını metin olarak oku
+    content=$(<"$file")
+
+    # "log." ile başlayan ve ilk ';' karakterine kadar olan kısmı sil
+    cleaned_content=$(echo "$content" | sed 's/log\.[^;]*;//g')
+
+    # Temizlenmiş içeriği dosyaya yaz
+    echo -n "$cleaned_content" > "$file"
+
+    # Silinen satırları ekrana yaz
+    echo "Dosya: $file - Silinen Kısımlar:"
+    echo "$content" | grep -o 'log\.[^;]*;'
+done
+
+echo "Tüm Java dosyalarında 'log.' ile başlayan ve ilk ';' karakteri dahil olan kısımlar silindi."
+```
+
+### Açıklama:
+1. **`find "$DIRECTORY" -name "*.java"`**: Belirtilen dizin ve alt dizinlerdeki tüm `.java` dosyalarını bulur.
+2. **`while read -r file; do`**: Bulunan her dosya için işlem yapar.
+3. **`content=$(<"$file")`**: Dosyanın tamamını metin olarak okur.
+4. **`cleaned_content=$(echo "$content" | sed 's/log\.[^;]*;//g')`**: "log." ile başlayan ve ilk `;` karakterine kadar olan kısmı siler. `sed` komutu, bu deseni tüm dosyada arar ve siler.
+5. **`echo -n "$cleaned_content" > "$file"`**: Temizlenmiş içeriği dosyaya yazar.
+6. **`echo "$content" | grep -o 'log\.[^;]*;'`**: Silinen kısımları ekrana yazdırır.
+
+### Kullanım:
+1. Yukarıdaki kodu bir dosyaya (örneğin `remove_log_lines.sh`) kaydedin.
+2. Terminalde dosyanın bulunduğu dizine gidin.
+3. Script'i çalıştırmadan önce çalıştırma izni verin:
+   ```bash
+   chmod +x remove_log_lines.sh
+   ```
+4. Script'i çalıştırın:
+   ```bash
+   ./remove_log_lines.sh
+   ```
+
+Bu script, "log." ile başlayan ve ilk `;` karakteri görülene kadar olan kısmı siler, tüm dosyayı metin olarak okur ve işler. Herhangi bir sorunuz veya daha fazla yardıma ihtiyacınız olursa lütfen belirtin!
+
