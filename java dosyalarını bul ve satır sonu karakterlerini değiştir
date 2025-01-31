@@ -1,0 +1,12 @@
+#!/bin/bash  
+
+# Dizin yolunu belirtin  
+DIR="/path/to/your/directory"  
+
+# .java dosyalarını bul ve satır sonu karakterlerini değiştir  
+find "$DIR" -type f -name "*.java" -print0 | while IFS= read -r -d '' file; do  
+    dos2unix "$file"  # Önce Linux satır sonu karakterlerine dönüştür  
+    unix2dos "$file"  # Ardından Windows satır sonu karakterlerine dönüştür  
+done  
+
+echo "Satır sonu karakterleri başarıyla değiştirildi."
